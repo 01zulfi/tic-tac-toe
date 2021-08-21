@@ -1,0 +1,9 @@
+body {
+    background-color: black;
+    color: white;
+}
+
+#gameBoardDiv {
+    border: 2px solid white;
+    display: grid;
+}
