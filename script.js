@@ -1,6 +1,6 @@
 //Dependencies? Yes. No for now.
 const DisplayController = (() => {
-    const array = ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'O'];
+    const array = ['', '', '', '', '', '', '', '', ''];
     const gameBoardDiv = document.querySelector('#gameBoardDiv');
     const display = {
         grid: function() {
@@ -8,6 +8,7 @@ const DisplayController = (() => {
                 const gameBoardSquare = document.createElement('div');
                 gameBoardSquare.id = 'gameBoardSquare';
                 gameBoardDiv.appendChild(gameBoardSquare);
+                gameBoardSquare.classList.add(`${i}`)
             }
         },
         marker: function() {
@@ -19,20 +20,55 @@ const DisplayController = (() => {
     }
     const gamePlay = {
         set: function() {
-            document.querySelectorAll('#gameBoardSquare').forEach( index =>
-                index.addEventListener('click', () => {
-                index.textContent = 'O';
-            }))
-        }
+            const gameBoardSquareNodeList = document.querySelectorAll('#gameBoardSquare');
+            for(let i = 0; i < 9; i++) {
+                gameBoardSquareNodeList[i].addEventListener('click', () => {
+                    gameBoardSquareNodeList[i].textContent = 'X';
+                    array.splice(i, 1, 'X');
+                });
+            }
+        },
     }
     return {
-        grid: display.grid(),
+        array,
+        display,
         //marker: display.marker(),
-        gamePlay: gamePlay,
+        gamePlay,
         }
 })();
 
-DisplayController.gamePlay.set();
+
+DisplayController.display.grid();
+//DisplayController.grid.marker();
+//DisplayController.gamePlay.set();
+
+
+const GameBoard = (( ) => {
+    const gameBoard = {
+        array: ['', '', '', '', '', '', '', '', ''],
+        init: function() {
+            this.cacheDom();
+            this.bindEvents();
+            
+        },
+        cacheDom: function() {
+            this.gameBoardDiv = document.querySelector('#gameBoardDiv');
+        },
+        bindEvents: function () {
+            this.gameBoardDiv.addEventListener('click', this.modifyArray);
+        },
+        modifyArray: function() {
+            this.index = event.target.className;
+            gameBoard.array.splice(this.index, 1, 'X');
+        }
+    }
+   gameBoard.init();
+   return {
+    array: gameBoard.array,
+   }
+})();
+
+
 
 // const GameBoard = (() => { //control array
 //     const gameBoard = {
@@ -52,3 +88,6 @@ function Player(name, marker) {
         marker
     }
 }
+
+
+
