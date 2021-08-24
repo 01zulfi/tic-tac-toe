@@ -1,6 +1,5 @@
 //Dependencies? Yes. No for now.
 const DisplayController = (() => {
-    const array = ['', '', '', '', '', '', '', '', ''];
     const gameBoardDiv = document.querySelector('#gameBoardDiv');
     const display = {
         grid: function() {
@@ -11,45 +10,47 @@ const DisplayController = (() => {
                 gameBoardSquare.classList.add(`${i}`)
             }
         },
-        marker: function() {
-            const gameBoardSquareNodeList = document.querySelectorAll('#gameBoardSquare');
-            for (let i = 0; i < 9; i++) {
-                gameBoardSquareNodeList[i].textContent = array[i];
-            }
-        }
     }
     const gamePlay = {
         set: function() {
-            const gameBoardSquareNodeList = document.querySelectorAll('#gameBoardSquare');
-            for(let i = 0; i < 9; i++) {
-                gameBoardSquareNodeList[i].addEventListener('click', () => {
-                    gameBoardSquareNodeList[i].textContent = 'X';
-                    array.splice(i, 1, 'X');
-                });
-            }
+            gameBoardDiv.addEventListener('click', this.marker)
+            
         },
+        marker: function() {
+            if (event.target.textContent) {
+                return
+            }
+            if (gamePlay.check % 2 === 0) {
+                event.target.textContent = 'O';
+                gamePlay.check++;
+                event.target.classList.add('filled');
+            } else {
+                event.target.textContent = 'X';
+                gamePlay.check++;
+                event.target.classList.add('filled');
+            }
+            
+        },
+        check: 1, 
     }
     return {
-        array,
         display,
-        //marker: display.marker(),
         gamePlay,
         }
 })();
 
-
 DisplayController.display.grid();
-//DisplayController.grid.marker();
-//DisplayController.gamePlay.set();
+DisplayController.gamePlay.set();
 
 
 const GameBoard = (( ) => {
     const gameBoard = {
         array: ['', '', '', '', '', '', '', '', ''],
+        check: 1,
         init: function() {
             this.cacheDom();
             this.bindEvents();
-            
+            //this.winCondition();
         },
         cacheDom: function() {
             this.gameBoardDiv = document.querySelector('#gameBoardDiv');
@@ -58,27 +59,46 @@ const GameBoard = (( ) => {
             this.gameBoardDiv.addEventListener('click', this.modifyArray);
         },
         modifyArray: function() {
-            this.index = event.target.className;
-            gameBoard.array.splice(this.index, 1, 'X');
+            if (gameBoard.array[event.target.className[0]]) return
+            this.index = event.target.className[0];
+            if (gameBoard.check % 2 === 0) {
+                gameBoard.array.splice(this.index, 1, 'O');
+                gameBoard.check++;
+            } else {
+                gameBoard.array.splice(this.index, 1, 'X');
+                gameBoard.check++;
+            }
+            gameBoard.winCondition();
+        },
+        
+        winCondition: function() {
+            // if (gameBoard.array[0] === gameBoard.array[1] && gameBoard.array[0] === gameBoard.array[2]) {
+            //     if (gameBoard.array[0] !== "") {
+            //         console.log("win")
+            //     }
+            // }
+            // if (gameBoard.array[3] === gameBoard.array[4] && gameBoard.array[3] === gameBoard.array[5]) {
+            //     if (gameBoard.array[3] !== "") {
+            //         console.log("win")
+            //     }
+            // }
+            for (let i = 0; i < 7; i++) {
+                if ( gameBoard.array[i] === gameBoard.array[i+1] && gameBoard.array[i] === gameBoard.array[i+2]) {
+                    if (gameBoard.array[i] !== "") { 
+                        console.log('win')
+                        document.querySelector('#gameBoardDiv').removeEventListener('click', this.modifyArray);
+                    }
+                }
+            }
         }
     }
-   gameBoard.init();
    return {
-    array: gameBoard.array,
+        init: gameBoard.init(),
+        array: gameBoard.array, //currently used for debugging
+        check: gameBoard.check, //currently used for debugging
    }
 })();
 
-
-
-// const GameBoard = (() => { //control array
-//     const gameBoard = {
-//         array: ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'O'],
-//     }
-//     DisplayController.gamePlay.set();
-//     return {
-//         gameBoard
-//     }
-// })()
 
 
 
@@ -88,6 +108,5 @@ function Player(name, marker) {
         marker
     }
 }
-
 
 
