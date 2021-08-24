@@ -117,6 +117,8 @@ const GamePlay = (() => {
             this.modal = document.querySelector('#modal');
             this.winnerText = document.querySelector('#winnerText');
             this.restartButton = document.querySelector('#restart');
+            this.player1 = document.querySelector('#player1');
+            this.player2 = document.querySelector('#player2');
         },
         set: function() {
             this.gameBoardDiv.addEventListener('click', this.marker);
@@ -142,15 +144,17 @@ const GamePlay = (() => {
         winnerModal: function(playerMark) {
             if (playerMark) {
                 this.modal.style.display = "flex";
-                this.winnerText.textContent = `${playerMark} won!`
+                if (playerMark === "X") {
+                    this.winnerText.textContent = `${this.player1.textContent} (X) won!`;
+                } else {
+                    this.winnerText.textContent = `${this.player2.textContent} (O) won!`;
+                }
             }
             this.count++;
             if (this.count === 9) {
                 this.modal.style.display = "flex";
                 this.winnerText.textContent = `Game Tied!`;
-            }
-            
-            
+            }  
         },
         pageReload: function() {
             location.reload();
