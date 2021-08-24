@@ -70,24 +70,35 @@ const GameBoard = (( ) => {
             }
             gameBoard.winCondition();
         },
-        
         winCondition: function() {
-            // if (gameBoard.array[0] === gameBoard.array[1] && gameBoard.array[0] === gameBoard.array[2]) {
-            //     if (gameBoard.array[0] !== "") {
-            //         console.log("win")
-            //     }
-            // }
-            // if (gameBoard.array[3] === gameBoard.array[4] && gameBoard.array[3] === gameBoard.array[5]) {
-            //     if (gameBoard.array[3] !== "") {
-            //         console.log("win")
-            //     }
-            // }
             for (let i = 0; i < 7; i++) {
                 if ( gameBoard.array[i] === gameBoard.array[i+1] && gameBoard.array[i] === gameBoard.array[i+2]) {
                     if (gameBoard.array[i] !== "") { 
                         console.log('win')
                         document.querySelector('#gameBoardDiv').removeEventListener('click', this.modifyArray);
+                        return
                     }
+                }
+                if (gameBoard.array[i] === gameBoard.array[i+3] && gameBoard.array[i] === gameBoard.array[i+6]) {
+                    if (gameBoard.array[i] !== "") { 
+                        console.log('win')
+                        document.querySelector('#gameBoardDiv').removeEventListener('click', this.modifyArray);
+                        return
+                    }
+                }
+            }
+            if (gameBoard.array[0] === gameBoard.array[4] && gameBoard.array[0] === gameBoard.array[8]) {
+                if (gameBoard.array[0] !== "") { 
+                    console.log('win')
+                    document.querySelector('#gameBoardDiv').removeEventListener('click', this.modifyArray);
+                    return
+                }
+            }
+            if (gameBoard.array[2] === gameBoard.array[4] && gameBoard.array[2] === gameBoard.array[6]) {
+                if (gameBoard.array[2] !== "") { 
+                    console.log('win')
+                    document.querySelector('#gameBoardDiv').removeEventListener('click', this.modifyArray);
+                    return
                 }
             }
         }
