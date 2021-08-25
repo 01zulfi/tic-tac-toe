@@ -6,8 +6,7 @@ body {
     align-items: center;
     padding: 0px;
     margin: 0px;
-    background-color: rgb(53,56,57)
-
+    background-color: rgb(53,56,57);
 }
 
 h1 {
@@ -45,8 +44,10 @@ h1 {
     background-color: rgb(192, 192, 192, 0.5);
 }
 
-#player1:hover, #player2:hover {
+#player1:hover, #player2:hover,
+#player1:focus, #player2:focus {
     background-color: rgb(255, 255, 255, 0.8);
+    transform: scale(1.2, 1.2);
 }
 
 .mark {
@@ -64,8 +65,7 @@ h1 {
     width: 40vw;
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
-    grid-template-columns: 1fr 1fr 1fr;
-    
+    grid-template-columns: 1fr 1fr 1fr;  
 }
 
 #gameBoardSquare {
@@ -97,7 +97,6 @@ h1 {
     align-items: center;
 }
   
-
 #modalContent {
     font-family: "Abril Fatface", sans-serif;
     border: 2px solid white;

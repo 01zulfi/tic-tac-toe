@@ -1,33 +1,23 @@
-//Dependencies? Yes. No for now.
-const DisplayController = (() => {
+const InitialDisplay = (() => {
     const gameBoardDiv = document.querySelector('#gameBoardDiv');
-    const display = {
-        grid: function() {
-            for (let i = 0; i < 9; i++) {
-                const gameBoardSquare = document.createElement('div');
-                gameBoardSquare.id = 'gameBoardSquare';
-                gameBoardDiv.appendChild(gameBoardSquare);
-                gameBoardSquare.classList.add(`${i}`)
-            }
-        },
+    function createBoard() {
+        for (let i = 0; i < 9; i++) {
+            const gameBoardSquare = document.createElement('div');
+            gameBoardSquare.id = 'gameBoardSquare';
+            gameBoardDiv.appendChild(gameBoardSquare);
+            gameBoardSquare.classList.add(`${i}`);
+        }
     }
-    return {
-        display,
-    }
+    createBoard();
 })();
 
-DisplayController.display.grid();
-
-
-
-const GameBoard = (( ) => {
+const GameBoard = (() => {
     const gameBoard = {
         array: ['', '', '', '', '', '', '', '', ''],
         check: 1,
         init: function() {
             this.cacheDom();
             this.bindEvents();
-            //this.winCondition();
         },
         cacheDom: function() {
             this.gameBoardDiv = document.querySelector('#gameBoardDiv');
@@ -52,13 +42,11 @@ const GameBoard = (( ) => {
         },
         winCondition: function() {
             this.won = {};
-           
             for (let i = 0; i < 7;) {
                 if ( gameBoard.array[i] === gameBoard.array[i+1] && gameBoard.array[i] === gameBoard.array[i+2]) {
-                    if (gameBoard.array[i] !== "") { 
+                    if (gameBoard.array[i] !== "") {
                         this.won.marker = gameBoard.array[i];
                         this.unbindEvents();
-                        //GamePlay.gamePlay.unset();
                         break
                     }
                 }
@@ -66,10 +54,9 @@ const GameBoard = (( ) => {
             }
             for (let i = 0; i < 3; i++) {
                 if (gameBoard.array[i] === gameBoard.array[i+3] && gameBoard.array[i] === gameBoard.array[i+6]) {
-                    if (gameBoard.array[i] !== "") { 
+                    if (gameBoard.array[i] !== "") {
                         this.won.marker = gameBoard.array[i];
                         this.unbindEvents();
-                        //GamePlay.gamePlay.unset();
                         break
                     }
                 }
@@ -78,39 +65,27 @@ const GameBoard = (( ) => {
                 if (gameBoard.array[0] !== "") {
                     this.won.marker = gameBoard.array[0];
                     this.unbindEvents();
-                    //GamePlay.gamePlay.unset();
-                    
                 }
             }
             else if (gameBoard.array[2] === gameBoard.array[4] && gameBoard.array[2] === gameBoard.array[6]) {
-                if (gameBoard.array[2] !== "") { 
+                if (gameBoard.array[2] !== "") {
                     this.won.marker = gameBoard.array[2];
                     this.unbindEvents();
-                    //GamePlay.gamePlay.unset();
-                    
                 }
             }
-        
-                GamePlay.gamePlay.winnerModal(this.won.marker);
-            
-        }
+            GameDisplay.gamePlay.winnerModal(this.won.marker);
+        },
     }
-   return {
-        init: gameBoard.init(),
-        won: gameBoard.won, 
-        array: gameBoard.array, //currently used for debugging
-        check: gameBoard.check, //currently used for debugging
-   }
+    gameBoard.init();
 })();
 
-
-
-
-const GamePlay = (() => {
+const GameDisplay = (() => {
     const gamePlay = {
+        check: 1,
+        count: 0,
         init: function() {
             this.cacheDom();
-            this.set();
+            this.bindEvents();
         },
         cacheDom: function() {
             this.gameBoardDiv = document.querySelector('#gameBoardDiv');
@@ -120,11 +95,11 @@ const GamePlay = (() => {
             this.player1 = document.querySelector('#player1');
             this.player2 = document.querySelector('#player2');
         },
-        set: function() {
-            this.gameBoardDiv.addEventListener('click', this.marker);
+        bindEvents: function() {
+            this.gameBoardDiv.addEventListener('click', this.renderMarker);
             this.restartButton.addEventListener('click', this.pageReload);
         },
-        marker: function() {
+        renderMarker: function() {
             if (event.target.textContent) {
                 return
             }
@@ -137,10 +112,7 @@ const GamePlay = (() => {
                 gamePlay.check++;
                 event.target.classList.add('filled');
             }
-            
         },
-        check: 1, 
-        count: 0,
         winnerModal: function(playerMark) {
             if (playerMark) {
                 this.modal.style.display = "flex";
@@ -154,29 +126,16 @@ const GamePlay = (() => {
             if (this.count === 9) {
                 this.modal.style.display = "flex";
                 this.winnerText.textContent = `Game Tied!`;
-            }  
+            }
         },
         pageReload: function() {
             location.reload();
-        }
+        },
     }
     gamePlay.init();
     return {
         gamePlay,
-        }
-})(); 
-
-
-//GamePlay.gamePlay.set();
-
-
-
-
-function Player(name, marker) {
-    return {
-        name,
-        marker
     }
-}
+})();
 
 
